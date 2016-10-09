@@ -20,4 +20,4 @@ for repository in json_response:
     print("\n", flush=True)
 
 print("\nSkipped " + str(skipped_repos_num) + " repositories", flush=True)
-print("Imported " + str(imported_repos_num) + " repositories", flush=True)
+print("Imported " + str(imported_repos_num) + " repositories\n", flush=True)
