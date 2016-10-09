@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 script_name=$(basename $0)
 
