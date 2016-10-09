@@ -6,9 +6,10 @@ print_usage_and_exit_with_error() {
   echo $'\nUsage:' >&2
   echo $"  $script_name repo={user_or_org_name}/{repo_name}" >&2
   echo $"  $script_name {user_or_org_name}/{repo_name}" >&2
-  echo $'\nWhere {user_or_org_name} and {repo_name} should be substituted' \
-    'with GitHub user name or organization name and repository name' \
-    'respectively' >&2
+  echo $'\nWhere:' >&2
+  echo $'  {user_or_org_name} - GitHub user or organization name' >&2
+  echo $'  {repo_name} - GitHub repository name from user or organization' >&2
+
   exit 1
 }
 
@@ -51,4 +52,4 @@ if [[ -d $repo_name ]]; then
 fi
 
 echo "About to clone '$repo_name' from '$user_or_org_name'"
-git clone git@github.com:$user_or_org_name/$repo_name.git
+git clone "git@github.com:$user_or_org_name/$repo_name.git"
