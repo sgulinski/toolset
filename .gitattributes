@@ -1,2 +1,4 @@
 *.py eol=lf
 *.sh eol=lf
+
+github_clone eol=lf

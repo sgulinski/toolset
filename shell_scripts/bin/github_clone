@@ -1,0 +1,42 @@
+#!/bin/sh
+
+script_path=$(dirname $0)
+script_name=$(basename $0)
+
+print_usage_and_exit_with_error() {
+  echo $'\nUsage:' >&2
+  echo $"  $script_name user={user_name}" >&2
+  echo $"  $script_name org={org_name}" >&2
+  echo $"  $script_name user_and_org={user_and_org_name}" >&2
+  echo $"  $script_name {user_and_org_name}" >&2
+  echo $"  $script_name repo={user_or_org_name}/{repo_name}" >&2
+  echo $"  $script_name {user_or_org_name}/{repo_name}" >&2
+  echo $'\nWhere:' >&2
+  echo $'  {user_name} - GitHub user name' >&2
+  echo $'  {org_name} - GitHub organization name' >&2
+  echo $'  {user_and_org_name} - GitHub user and organization name.' \
+    'Repositories for both account types will be cloned' >&2
+  echo $'  {user_or_org_name} - GitHub user or organization name' >&2
+  echo $'  {repo_name} - GitHub repository name from user or organization' >&2
+
+  exit 1
+}
+
+
+if [[ $# -ne 1 ]]; then
+  print_usage_and_exit_with_error
+fi
+
+
+if [[ $1 =~ ^(repo\=){0,1}(.+)\/(.+) ]]; then
+  $script_path/../lib/github_clone_repo.sh "$@"
+elif [[ $1 =~ ^(user\=|org\=|user_and_org\=){0,1}(.+) ]]; then
+  $script_path/../lib/github_clone_all.sh "$@"
+else
+  echo "Encountering this message means there is a bug in" \
+    "'$script_name' source code. Check completeness of the regexp matching" \
+    "for single input argument - (.+) in second 'if' branch should match" \
+    "any string"
+
+  exit 1
+fi

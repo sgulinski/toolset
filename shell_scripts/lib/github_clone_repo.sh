@@ -29,7 +29,7 @@ github_uri="https://api.github.com/repos/$user_or_org_name/$repo_name"
 echo "Using uri '$github_uri' to verify if repository '$repo_name' for user" \
   "or organization '$user_or_org_name' exists"
 
-json_response=$(curl -s $github_uri) 
+json_response=$(curl -s $github_uri)
 
 if [[ $json_response =~ '"message": "Not Found"' ]]; then
   echo "Invalid GitHub user name, organization name and/or repository name" >&2
