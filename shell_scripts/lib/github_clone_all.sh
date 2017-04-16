@@ -19,6 +19,10 @@ print_usage_and_exit_with_error() {
   exit 1
 }
 
+python3_command_exists() {
+  command -v python3 >/dev/null 2>&1;
+}
+
 create_repositories_dir_if_not_created() {
   if [[ ${PWD} == "$script_run_path/$user_or_org_name" ]]; then
     return
@@ -45,7 +49,7 @@ clone_repositories() {
 
   create_repositories_dir_if_not_created
 
-  echo $json_response | python $script_path/github_clone_all_from_json.py
+  echo $json_response | python3 $script_path/github_clone_all_from_json.py
 }
 
 
@@ -55,6 +59,11 @@ fi
 
 if [[ ! ($1 =~ ^(user\=|org\=|user_and_org\=){0,1}(.+)) ]]; then
   print_usage_and_exit_with_error
+fi
+
+if ! python3_command_exists; then
+  echo "python3 required, but not found. Aborting." >&2
+  exit 1
 fi
 
 user_or_org_prefix=${BASH_REMATCH[1]}

@@ -10,7 +10,7 @@ skipped_repos_num=0
 
 for repository in json_response:
     if (not os.path.isdir("./" + repository["name"])):
-        subprocess.call("git clone " + repository["ssh_url"])
+        subprocess.call("git clone " + repository["ssh_url"], shell=True)
         imported_repos_num += 1
     else:
         print("Repository '" + repository["name"] + "' exists - skipping",
