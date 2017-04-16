@@ -2,3 +2,4 @@
 *.sh eol=lf
 
 github_clone eol=lf
+ssh_add_private_keys eol=lf

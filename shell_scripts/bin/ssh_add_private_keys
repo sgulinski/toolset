@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# Names of the private ssh keys that will be added to an ssh agent. For each
+# name "X" two prerequisites need to be satisfied. An ssh key named "X" has to
+# be present in directory specified under ssh_keys_path variable below and
+# LastPass vault needs to contain passphrase for this key in a secure note named
+# "X".
+ssh_keys=(github)
+
+script_name=$(basename $0)
+ssh_keys_path="$HOME/.ssh"
+
+print_usage_and_exit_with_error() {
+  echo $'\nUsage:' >&2
+  echo $"  $script_name {lpass_user_name}" >&2
+  exit 1
+}
+
+lpass_command_exists() {
+  command -v lpass >/dev/null 2>&1;
+}
+
+if [[ $# -ne 1 ]]; then
+  print_usage_and_exit_with_error
+fi
+
+if ! lpass_command_exists; then
+  echo "lpass (command line interface for LastPass) required, but not found. " \
+    "Aborting." >&2
+  exit 1
+fi
+
+# Login to LastPass vault using username passed as a run parameter
+lpass login $1;
+
+for key in "${ssh_keys[@]}"
+do
+  echo $"Adding $key to an ssh agent" 
+  key_passphrase=$(lpass show --field=Passphrase $key)
+
+  # Add ssh key to an ssh agent using passphrase stored in the LastPass vault
+  expect -c "spawn ssh-add \"$ssh_keys_path/$key\"
+    expect \"Enter passphrase\"
+    send \"$key_passphrase\r\"
+    expect eof"
+done
+
+lpass logout -f
