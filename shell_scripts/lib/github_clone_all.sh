@@ -1,8 +1,8 @@
 #!/bin/sh
 
-script_path=$(dirname $0)
-script_name=$(basename $0)
 script_run_path=${PWD}
+script_path="$( cd $( dirname $0 ) && pwd )"
+script_name=$( basename $0 )
 
 print_usage_and_exit_with_error() {
   echo $'\nUsage:' >&2
@@ -32,11 +32,11 @@ create_repositories_dir_if_not_created() {
   if [[ ! (-d $repositories_folder) ]]; then
     echo "Creating directory './$repositories_folder' for repositories from" \
       "'$user_or_org_name'"
-    mkdir "./$repositories_folder"
+    mkdir "$script_run_path/$repositories_folder"
   fi
 
   echo "Changing current working directory to './$repositories_folder'"
-  cd "./$repositories_folder"
+  cd "$script_run_path/$repositories_folder"
 }
 
 clone_repositories() {
